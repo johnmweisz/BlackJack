@@ -7,22 +7,26 @@ namespace BlackJack
 	{
 		static void Main(string[] args)
 		{
+			var gamesWon = 0;
+			var gamesLost = 0;
+			var gamesTied = 0;
 
-			System.Console.WriteLine("Welcome to Black Jack!");
-			var again = "y";
-			Boolean isGameOver = false;
+      // Set up player and dealer.
 			Deck deck = new Deck();
 			deck.Shuffle();
 			Player dealer = new Player("dealer");
 			Player player = new Player("player");
 
-			while(again == "y" && !isGameOver)
+			System.Console.WriteLine("Welcome to Black Jack!");
+
+      // Game loop.
+			while(true)
 			{
+
 				System.Console.WriteLine("New Round has started...");
 
 				var isRoundOver = false;
-				Boolean isWinner;
-
+				var isWinner = false;
 				var bet = 0;
 
 				dealer.Draw(deck);
@@ -91,36 +95,38 @@ namespace BlackJack
 				Console.WriteLine("");
 				Console.WriteLine("~~~~~~Dealers cards are:~~~~~~");
 				dealer.ShowCards();
-				Console.WriteLine($"Dealer total is {dealer.getHandScore}.");
 				Console.WriteLine("");
 				Console.WriteLine("~~~~~~Your cards are:~~~~~~");
 				player.ShowCards();
+				Console.WriteLine($"Dealer total is {dealer.getHandScore}.");
 				Console.WriteLine($"Player total is {player.getHandScore}.");
 				
 				// Check win condition.
 				if (player.getHandScore > 21)
 				{
-					isWinner = false;
+					gamesLost += 1;
 					player.PrintLose();
 				}
 				else if (dealer.getHandScore > 21)
 				{
+					gamesWon += 1;
 					isWinner = true;
 					player.PrintWin();
 				}
 				else if (dealer.getHandScore == player.getHandScore)
 				{
-					isWinner = false;
+					gamesTied += 1;
 					player.coins += bet;
 					player.PrintPush();
 				}
 				else if (dealer.getHandScore > player.getHandScore)
 				{
-					isWinner = false;
+					gamesLost += 1;
 					player.PrintLose();
 				}
 				else
 				{
+					gamesWon += 1;
 					isWinner = true;
 					player.PrintWin();
 				}
@@ -140,23 +146,29 @@ namespace BlackJack
 				// Check if player can play again.
 				if(player.coins <= 0)
 				{
-					isGameOver = true;
 					break;
 				}
 				// Play again or end game.
 				Console.WriteLine("Play again? y/n");
-				again = Console.ReadLine();
+				string again = Console.ReadLine();
+        if (again != "y")
+        {
+          break;
+        }
 			}
 
 			// Display game end condition result.
+			Console.WriteLine("#########################################");
+			Console.WriteLine($"          Won: {gamesWon} Lost: {gamesLost} Tied: {gamesTied}         ");
 			if (player.coins > 0 )
 			{
-				Console.WriteLine($"Player ended the game with {player.coins} coins.");
+				Console.WriteLine($"  Player ended the game with {player.coins} coins.  ");
 			}
 			else
 			{
-				Console.WriteLine("You are broke.  Goodbye!");
+				Console.WriteLine("         You are broke.  Goodbye!        ");
 			}
+			Console.WriteLine("#########################################");
 		}
 	}
 }
