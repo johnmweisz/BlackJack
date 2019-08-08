@@ -81,8 +81,8 @@ namespace BlackJack
 				// Dealer draws.
 				while (dealer.getHandScore < 15)
 				{
-					Console.WriteLine($"Dealer draws card #{dealer.getCardCount}.");
 					dealer.Draw(deck);
+					Console.WriteLine($"Dealer draws card #{dealer.getCardCount}.");
 					// Change Ace value to 1 if necessary.
 					dealer.CheckAce();
 				}
